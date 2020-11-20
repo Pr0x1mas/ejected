@@ -1,5 +1,5 @@
 # main.py - Created for Ejected by TheProgramableTurtle and Pr0x1mas - 20/11/2020
-# what
+
 import socket
 import threading
 
