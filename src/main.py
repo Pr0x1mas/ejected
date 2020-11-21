@@ -11,7 +11,8 @@ serverAddress = (ip, port)
 sock.bind(serverAddress)
 
 def acknowledge(nonce, address):
-    sock.sendto(b'0x0a' + nonce + b'\0xFF', address)
+    #sock.sendto(sock.sendto(b'\x0a' + nonce + b'\xFF', address))
+    sock.sendto(b'\x0a' + nonce + b'\xFF', address)
 
 class packet:
     def __init__(self, inputData):
@@ -33,6 +34,7 @@ class packet:
             self.data = decode.Acknowledge(self.rawData)
         elif self.opcode == 12:
             self.data = decode.Ping(self.rawData)
+            acknowledge(self.data["nonce"], self.clientAddress)
         else:
             raise Exception("Unknown opcode " + str(self.opcode) + "\n data: " + str(self.rawData))
 
@@ -42,3 +44,4 @@ class packet:
 
 while True:
     input = packet(sock.recvfrom(1024))
+    pass
