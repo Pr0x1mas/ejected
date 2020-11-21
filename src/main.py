@@ -4,7 +4,7 @@ import decode
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 port = 22023
-ip = "127.0.0.1"
+ip = ""
 
 serverAddress = (ip, port)
 
