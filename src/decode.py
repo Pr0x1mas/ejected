@@ -1,53 +1,75 @@
-def Unreliable(inputData):
+import byteReader
+
+def unreliable(inputData):
+    byteReader.init(inputData)
     data = {
-        "opcode": inputData[0],
-        "length": inputData[1:3],
-        "ID": inputData[3],
-        "data": inputData[4:len(inputData) + 2]
+        "opcode": byteReader.byte(),
+        "length": byteReader.uint16(),
+        "ID": byteReader.uint8(),
+        "data": byteReader.endBytes()
     }
     return data
 
-def Reliable(inputData):
+def reliable(inputData):
+    byteReader.init(inputData)
     data = {
-        "opcode": inputData[0],
-        "nonce": inputData[1:3],
-        "length": inputData[3:5],
-        "ID": inputData[5],
-        "data": inputData[6:len(inputData) + 1]
+        "opcode": byteReader.byte(),
+        "nonce": byteReader.uint16(),
+        "length": byteReader.uint16(),
+        "ID": byteReader.uint8(),
+        "data": byteReader.endBytes()
     }
+    '''
+    if data["ID"] == 0x00:
+        hostGameRequest(data)
+    '''
     return data
 
-def Hello(inputData):
+def hello(inputData):
+    byteReader.init(inputData)
     data = {
-        "opcode": inputData[0],
-        "nonce": inputData[1:3],
-        "hazelVersion": inputData[3],
-        "clientVersion": inputData[4:8],
-        "username": inputData[8:len(inputData) + 1].decode('utf-8')
-    }
-
-    return data
-
-def Disconnect(inputData):
-    data = {
-        "opcode": inputData[0],
-        "length": inputData[2:4]
-    }
-
-    return data
-
-def Acknowledge(inputData):
-    data = {
-        "opcode": inputData[0],
-        "nonce": inputData[1:3],
+        "opcode": byteReader.byte(),
+        "nonce": byteReader.uint16(),
+        "hazelVersion": byteReader.uint8(),
+        "clientVersion": byteReader.int32(),
+        "username": byteReader.endBytes().decode('utf-8')
     }
 
     return data
 
-def Ping(inputData):
+def disconnect(inputData):
+    byteReader.init(inputData)
     data = {
-        "opcode": inputData[0],
-        "nonce": inputData[1:3],
+        "opcode": byteReader.byte(),
+        "length": byteReader.uint16()
     }
 
     return data
+
+def acknowledge(inputData):
+    byteReader.init(inputData)
+    data = {
+        "opcode": byteReader.byte(),
+        "nonce": byteReader.uint16()
+    }
+
+    return data
+
+def ping(inputData):
+    byteReader.init(inputData)
+    data = {
+        "opcode": byteReader.byte(),
+        "nonce": byteReader.uint16()
+    }
+
+    return data
+
+'''
+def hostGameRequest(inputData):
+    options = {
+        "length": inputData[1],
+        "version": inputData[2],
+        "maxPlayers": inputData[3],
+        "language": inputData[3],
+    }
+'''
